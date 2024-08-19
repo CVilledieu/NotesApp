@@ -1,52 +1,59 @@
 package main
 
 import (
+	welcome "Notes/cmd/banner"
 	"bufio"
 	"fmt"
 	"os"
 )
 
 func main() {
-	printWelcome()
+	welcome.Banner()
+	Nav()
 
 }
 
-func printWelcome() {
-	fmt.Println("Welcome to my notes!")
-}
-
-func navStart() {
+func Nav() {
 	fmt.Println("Would you like to:")
 	fmt.Println("Enter 1 to start a new note")
-	fmt.Println("Enter 2 for a list of current notes")
-	fmt.Println("Enter 3 to edit a prexisting note")
-	fmt.Println("Enter 4 to delete a preexisting note")
+	fmt.Println("Enter 2 to search for a note")
+	fmt.Println("Enter 3 to exit")
 	scanner := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Print("Enter your choice: ")
 		text, _ := scanner.ReadString('\n')
 		switch text {
 		case "1":
-			newNote()
+			newNote(scanner)
 		case "2":
-			listNotes()
+			searchNote()
 		case "3":
-			editNote()
-		case "4":
-			deleteNote()
+			Exit()
 		default:
 			fmt.Println("Invalid choice, please try again.")
 		}
 	}
 }
 
-func newNote() {
+func newNote(scanner *bufio.Reader) {
 	fmt.Println("Enter the title of your note: ")
-	scanner := bufio.NewReader(os.Stdin)
-	title, _ := scanner.ReadString('\n')
+	//title, _ := scanner.ReadString('\n')
+	fmt.Println("Please enter !Exit to save and exit the note.")
 	fmt.Println("Enter the content of your note: ")
-	content, _ := scanner.ReadString('\n')
-	fmt.Println("Note created!")
+	for {
+		content, _ := scanner.ReadString('\n')
+		if content == "!Exit" {
+			saveNote()
+		}
+
+	}
+
+}
+
+func searchNote() {
+	fmt.Println("Searching for notes...")
+	fmt.Println("Enter ViewAll to view all notes.")
+	fmt.Println("Enter the title of the note you would like to search for: ")
 }
 
 func listNotes() {
@@ -59,4 +66,13 @@ func editNote() {
 
 func deleteNote() {
 	fmt.Println("Enter the title of the note you would like to delete: ")
+}
+
+func Exit() {
+	fmt.Println("Goodbye!")
+	os.Exit(0)
+}
+
+func saveNote() {
+	fmt.Println("Saving note...")
 }
