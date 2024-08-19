@@ -18,11 +18,12 @@ func Nav() {
 	fmt.Println("Enter 1 to start a new note")
 	fmt.Println("Enter 2 to search for a note")
 	fmt.Println("Enter 3 to exit")
-	scanner := bufio.NewReader(os.Stdin)
+	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Enter your choice: ")
-		text, _ := scanner.ReadString('\n')
-		switch text {
+		scanner.Scan()
+		text := scanner.Bytes()
+		switch string(text) {
 		case "1":
 			newNote(scanner)
 		case "2":
@@ -35,19 +36,28 @@ func Nav() {
 	}
 }
 
-func newNote(scanner *bufio.Reader) {
+func newNote(scanner *bufio.Scanner) {
 	fmt.Println("Enter the title of your note: ")
-	//title, _ := scanner.ReadString('\n')
+	scanner.Scan()
+	title := scanner.Text()
 	fmt.Println("Please enter !Exit to save and exit the note.")
 	fmt.Println("Enter the content of your note: ")
+	writeNote(title)
 	for {
-		content, _ := scanner.ReadString('\n')
+		scanner.Scan()
+		content := scanner.Text()
 		if content == "!Exit" {
-			saveNote()
+			fmt.Println("Save the note? (Y/N)")
+			scanner.Scan()
+			save := scanner.Text()
+			if save == "Y" {
+				saveNote()
+			}
+			Exit()
+		} else {
+			writeNote(content)
 		}
-
 	}
-
 }
 
 func searchNote() {
@@ -96,4 +106,18 @@ func Exit() {
 
 func saveNote() {
 	fmt.Println("Saving note...")
+}
+
+func writeNote(content string) {
+	file, err := os.OpenFile("public/notes/temp.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening file: ", err)
+		return
+	}
+	defer file.Close()
+	_, err = file.WriteString(content)
+	if err != nil {
+		fmt.Println("Error writing to file: ", err)
+		return
+	}
 }
