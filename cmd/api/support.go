@@ -6,6 +6,14 @@ import (
 	"os"
 )
 
+func errIsNil(target interface{}) bool {
+	if target == nil {
+		fmt.Println("Error: ", target)
+		return true
+	}
+	return false
+}
+
 func getInputText() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
