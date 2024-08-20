@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func NewNote() {
@@ -85,7 +86,7 @@ func saveNote() {
 	if errIsNil(err) {
 		return
 	}
-
+	title = strings.TrimSuffix(title, "\n")
 	newFile, err := os.OpenFile("public/notes/"+title+".txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if errIsNil(err) {
 		return

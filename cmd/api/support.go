@@ -7,7 +7,7 @@ import (
 )
 
 func errIsNil(target interface{}) bool {
-	if target == nil {
+	if target != nil {
 		fmt.Println("Error: ", target)
 		return true
 	}
