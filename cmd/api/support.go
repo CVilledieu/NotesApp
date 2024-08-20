@@ -20,23 +20,27 @@ func getInputText() string {
 	return scanner.Text()
 }
 
-func safetyCheck() {
+func safetyCheck() bool {
 	// Check if there is a temp file
 	if !isThereATemp() {
-		return // If there is no temp file, continue on with the program
+		return true // If there is no temp file, continue on with the program
 	}
 	// If there is a temp file, check if the user wants to save it
 	if !warning() {
-		return // If the user does not want to save the note, delete the temp file
+		return true // If the user does not want to save the note, delete the temp file
 	}
 	fmt.Println("Would you like to view the note before saving? (Y/N)")
 	view := getInputText()
 
-	if view == "Y" {
+	if view == "Y" || view == "y" {
 		ViewNote("public/notes/temp.txt") //
-	} else {
+		return false
+	} else if view == "N" || view == "n" {
 		saveNote()
-		return
+		return true
+	} else {
+		fmt.Println("Invalid input. Please try again.")
+		return safetyCheck()
 	}
 }
 
@@ -54,10 +58,13 @@ func warning() bool {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	save := scanner.Text()
-	if save == "Y" {
+	if save == "Y" || save == "y" {
 		return true
-	} else {
+	} else if save == "N" || save == "n" {
 		return false
+	} else {
+		fmt.Println("Invalid input. Please try again.")
+		return warning()
 	}
 
 }

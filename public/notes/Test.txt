@@ -1,4 +1,0 @@
-This is another test
-!exit
-Final test
-this should work

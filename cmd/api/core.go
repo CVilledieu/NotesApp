@@ -3,12 +3,15 @@ package notes
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
 
 func NewNote() {
-
+	if !safetyCheck() {
+		return
+	}
 	fmt.Println("Enter the title of your note: ")
 
 	title := getInputText()
@@ -30,6 +33,7 @@ func NewNote() {
 			writeNote(content)
 		}
 	}
+
 }
 
 func writeNote(content string) {
@@ -79,7 +83,6 @@ func saveNote() {
 	if errIsNil(err) {
 		return
 	}
-	defer tempFile.Close()
 
 	reader := bufio.NewReader(tempFile)
 	title, err := reader.ReadString('\n')
@@ -91,22 +94,22 @@ func saveNote() {
 	if errIsNil(err) {
 		return
 	}
-
+	defer newFile.Close()
+	defer tempFile.Close()
 	for {
 		data, err := reader.ReadString('\n')
+		if err == io.EOF {
+			break
+		}
 		if errIsNil(err) {
 			return
 		}
-
 		_, err = newFile.WriteString(data)
 		if errIsNil(err) {
 			return
 		}
-
-		if data == "" {
-			break
-		}
 	}
+	tempFile.Close()
 	err = os.Remove("public/notes/temp.txt")
 	if errIsNil(err) {
 		return
