@@ -10,7 +10,9 @@ import (
 
 func main() {
 	welcome.Banner()
-	Nav()
+	for {
+		Nav()
+	}
 }
 
 func getInputText() string {
@@ -23,37 +25,25 @@ func Nav() {
 	fmt.Println("Would you like to:")
 	fmt.Println("Enter 1 to start a new note")
 	fmt.Println("Enter 2 to search for a note")
-	fmt.Println("Enter 3 to exit")
+	fmt.Println("Enter 3 to view all notes")
+	fmt.Println("Enter 4 to exit")
 	for {
 		fmt.Print("Enter your choice: ")
 		text := getInputText()
 		switch text {
 		case "1":
 			notes.NewNote()
+			return
 		case "2":
-			searchNote()
+			notes.SearchNote()
+			return
 		case "3":
+			notes.ViewAll()
+			return
+		case "4":
 			notes.Exit()
 		default:
 			fmt.Println("Invalid choice, please try again.")
 		}
 	}
-}
-
-func searchNote() {
-	fmt.Println("Searching for notes...")
-	fmt.Println("Enter ViewAll to view all notes.")
-	fmt.Println("Enter the title of the note you would like to search for: ")
-}
-
-func listNotes() {
-	fmt.Println("Here are your notes:")
-}
-
-func editNote() {
-	fmt.Println("Enter the title of the note you would like to edit: ")
-}
-
-func deleteNote() {
-	fmt.Println("Enter the title of the note you would like to delete: ")
 }
