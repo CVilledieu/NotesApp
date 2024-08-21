@@ -18,7 +18,7 @@ func NewNote() {
 	writeNote(title)
 	for {
 		content := getInputText()
-		if content == "!Exit" {
+		if content == "!Exit" || content == "!exit" {
 			fmt.Println("Save the note? (Y/N)")
 			save := getInputText()
 			if save == "Y" {
@@ -63,7 +63,7 @@ func viewAllMenuFollowUp() {
 	input = strings.ToLower(input)
 	if input == "!menu" {
 		return
-	} else if input == "!exit" {
+	} else if input == "!Exit" || input == "!exit" {
 		Exit()
 	} else {
 		f, err := os.OpenFile("../public/notes/"+input+".txt", os.O_RDONLY, 0644)

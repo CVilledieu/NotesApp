@@ -22,51 +22,63 @@ func getInputText() string {
 	return scanner.Text()
 }
 
-func UnsavedWork() bool {
-	// Check if there is a temp file
-	if !isThereATemp() {
-		return true // If there is no temp file, continue on with the program
+func UnsavedWorkCheck() bool {
+	if _, err := os.Stat("public/notes/_temp.txt"); os.IsNotExist(err) {
+		return false
 	}
 	// If there is a temp file, check if the user wants to save it
-	if !warning() {
-		return true // If the user does not want to save the note, delete the temp file
-	}
-	fmt.Println("Would you like to view the note before saving? (Y/N)")
-	view := getInputText()
-
-	if view == "Y" || view == "y" {
-		viewNote("public/notes/temp.txt") //
-		return false
-	} else if view == "N" || view == "n" {
-		saveNote()
-		return true
-	} else {
-		fmt.Println("Invalid input. Please try again.")
-		return safetyCheck()
-	}
+	warning()
+	return false
 }
 
-func isThereATemp() bool {
-	if _, err := os.Stat("public/notes/temp.txt"); os.IsNotExist(err) {
-		return false
-	} else {
-		return true
-	}
-}
-
-func warning() bool {
+func warning() func() {
 	fmt.Println("Warning: You have an unsaved note.")
-	fmt.Println("Would you like to save it? (Y/N)")
+	fmt.Println("Would you like to view the note? (Y/N)")
 	save := getInputText()
 	if save == "Y" || save == "y" {
-		return true
+
+		return handleUnsavedWork()
 	} else if save == "N" || save == "n" {
-		return false
+		return nil
 	} else {
 		fmt.Println("Invalid input. Please try again.")
+
 		return warning()
 	}
 
+}
+
+func handleUnsavedWork() func() {
+	clearScreen()
+	viewNote("public/notes/_temp.txt")
+
+	fmt.Println("Save the note? (Y/N)")
+	fmt.Println("Edit the note? (E)")
+	view := getInputText()
+
+	if view == "Y" || view == "y" {
+		saveNote()
+	} else if view == "N" || view == "n" {
+		return nil
+	} else if view == "E" || view == "e" {
+		fmt.Println("Please enter !Exit to save and exit the note.")
+		fmt.Println("Enter the content of your note: ")
+		for {
+			content := getInputText()
+			if content == "!Exit" || content == "!exit" {
+				fmt.Println("Save the note? (Y/N)")
+				save := getInputText()
+				if save == "Y" {
+					saveNote()
+				}
+				return nil
+			}
+			writeNote(content)
+		}
+	} else {
+		fmt.Println("Invalid input. Please try again.")
+		return handleUnsavedWork()
+	}
 }
 
 func Exit() {
