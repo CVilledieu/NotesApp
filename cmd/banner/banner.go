@@ -18,10 +18,7 @@ func Banner() {
 		for j := 0; j < 5; j++ {
 			leter := getLetter(j, i)
 			for _, l := range leter {
-				fmt.Print(l)
-
 				num := ((j) * offset) + l + ci
-				fmt.Println(num)
 				line = append(line, num)
 			}
 			ci += spaceBetween

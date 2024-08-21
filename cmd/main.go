@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	notes.ClearScreen()
 	welcome.Banner()
 	for {
 		Nav()
