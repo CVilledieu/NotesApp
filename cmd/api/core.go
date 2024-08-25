@@ -41,26 +41,6 @@ func SearchNote() {
 	fmt.Println("Enter the title of the note you would like to search for: ")
 }
 
-func ViewAll() {
-	ClearScreen()
-	fmt.Println("Viewing notes...")
-	fmt.Print("\n")
-	files, err := os.ReadDir("public/notes")
-	if errIsNotNil(err) {
-		return
-	}
-	for _, file := range files {
-		fName := strings.TrimSuffix(file.Name(), ".txt")
-		if strings.HasPrefix(fName, "_") {
-			continue
-		} else {
-			fmt.Println(fName)
-		}
-
-	}
-	viewAllMenuFollowUp()
-}
-
 func viewAllMenuFollowUp() {
 	fmt.Print("\n")
 	fmt.Println("Enter !Menu to return to the main menu.")
@@ -117,37 +97,6 @@ func viewNoteFollowUp() {
 		viewNoteFollowUp()
 	}
 
-}
-
-func viewNote(path string) {
-	ClearScreen()
-	fmt.Println("Viewing note...")
-	dividers()
-	file, err := os.Open(path)
-	if err != nil {
-		fmt.Println("Error opening file: ", err)
-		return
-	}
-	defer file.Close()
-	data := make([]byte, 100)
-	for {
-		n, err := file.Read(data)
-
-		if err != nil {
-			if err == io.EOF {
-				viewNoteFollowUp()
-				break
-			} else {
-				fmt.Println("Error reading file: ", err)
-				return
-			}
-
-		}
-		fmt.Println(string(data[:n]))
-		if n == 0 {
-			break
-		}
-	}
 }
 
 func saveNote() {

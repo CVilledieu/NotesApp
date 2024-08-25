@@ -31,7 +31,7 @@ func UnsavedWorkCheck() bool {
 }
 
 func warning() func() {
-	ClearScreen()
+	dividers()
 	fmt.Println("Warning: You have an unsaved note.")
 	fmt.Println("Would you like to view the note? (Y/N)")
 	save := getInputText()
@@ -39,6 +39,7 @@ func warning() func() {
 
 		return handleUnsavedWork()
 	} else if save == "N" || save == "n" {
+		deleteNote("_temp")
 		return nil
 	} else {
 		fmt.Println("Invalid input. Please try again.")
@@ -96,4 +97,13 @@ func ClearScreen() {
 
 func dividers() {
 	fmt.Println("------------------------------------------------")
+}
+
+func deleteNote(input string) {
+	input = "public/notes/" + input + ".txt"
+	err := os.Remove(input)
+	if errIsNotNil(err) {
+		return
+	}
+	fmt.Println("Note deleted.")
 }
