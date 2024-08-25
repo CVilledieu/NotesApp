@@ -84,3 +84,22 @@ func viewNote(path string) {
 		}
 	}
 }
+
+func SearchNote() {
+	ClearScreen()
+	fmt.Println("Searching for notes...")
+	fmt.Println("Enter the title of the note you would like to search for: ")
+	title := getInputText()
+	if NoteExists(title) {
+		viewNote("public/notes/" + title + ".txt")
+	} else {
+		fmt.Println("Note does not exist.")
+		fmt.Println("Would you like to search for another note? (Y/N)")
+		answer := getInputText()
+		if answer == "Y" || answer == "y" {
+			SearchNote()
+		} else {
+			Nav()
+		}
+	}
+}

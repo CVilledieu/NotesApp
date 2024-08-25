@@ -34,13 +34,6 @@ func NewNote() {
 
 }
 
-func SearchNote() {
-	ClearScreen()
-	fmt.Println("Searching for notes...")
-	fmt.Println("Enter ViewAll to view all notes.")
-	fmt.Println("Enter the title of the note you would like to search for: ")
-}
-
 func viewAllMenuFollowUp() {
 	fmt.Print("\n")
 	fmt.Println("Enter !Menu to return to the main menu.")

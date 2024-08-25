@@ -21,6 +21,13 @@ func getInputText() string {
 	return scanner.Text()
 }
 
+func NoteExists(file string) bool {
+	if _, err := os.Stat("public/notes/" + file + ".txt"); os.IsExist(err) {
+		return true
+	}
+	return false
+}
+
 func UnsavedWorkCheck() bool {
 	if _, err := os.Stat("public/notes/_temp.txt"); os.IsNotExist(err) {
 		return false
